@@ -1,13 +1,106 @@
 # Fixed-point-cpp
-implementing Fixed point class to replace floating points in c++
-## THE IDEA
-As we all know (or most of us) floating point was  a smart invention but it unfortunatly adds a computing overhead.
 
-well, yeah they sucks, so I m trying today to make a simple design for a Fixed point where we prefer computing speed over precision, accurracy, range, overflow risk, ... whoah! thats many things. but yeah we get more perfermonce , yay!
+A lightweight, header-only C++ class that implements fixed-point arithmetic as a replacement for floating-point operations in performance-critical or hardware-constrained environments.
 
+---
 
-What? the speed will be noticable only on micro-contollers since modern hardware accelerates floating points arithmetic thanks to FPU? and using them could only make things worst?
-yeh yeh, but still the floats are bad, they hate kittens, the root of all evil, and theoricly consume more energy compared to integers arithmetics, and usefull on old hardware where could there be a lack for float SIMD, and there is an integer one.
+## 💡 Motivation
 
+Floating-point math is a brilliant invention... but let's face it — it's not always ideal.
 
-(i ll put later why floating points are bad, and why we call them floats, and why  fixed called fixed, or may be you do a pull request and do it ? add some feature or something too, I m lazy).
+In many situations, especially on microcontrollers or older hardware, floating-point operations:
+- Consume more power
+- Require more computational overhead
+- May not be supported natively (no FPU)
+- Can introduce rounding errors in places you don’t expect
+
+So here’s an attempt at creating a **simple fixed-point type**, where we prioritize **speed over precision, range, or safety**. It’s not for every use case, but in low-level systems, embedded devices, or performance-critical inner loops — it just might shine. 🚀
+
+---
+
+## ⚙️ What It Is
+
+This project provides a `Fixed` class using **8 fractional bits** (Q24.8 format) to:
+- Represent floats as integers under the hood
+- Replace float/double types where feasible
+- Gain some speed (especially on targets without FPUs)
+- Keep things simple and educational
+
+---
+
+## ✨ Features
+
+- Fixed-point math using integer ops
+- Arithmetic: `+`, `-`, `*`, `/`
+- Comparisons: `<`, `>`, `==`, etc.
+- Prefix/postfix `++` / `--`
+- Casting to `int` and `float`
+- `min()` and `max()` helpers
+- `std::ostream` support (`<<`)
+- Inline, header-only implementation
+
+---
+
+## 🧪 Example
+
+```cpp
+#include "Fixed.hpp"
+#include <iostream>
+
+int main() {
+    Fixed a(10);          // from int
+    Fixed b(3.5f);        // from float
+
+    std::cout << "a: " << a << ", b: " << b << "\n";
+    std::cout << "a + b = " << (a + b) << "\n";
+    std::cout << "a * b = " << (a * b) << "\n";
+
+    if (a > b)
+        std::cout << "a is greater than b\n";
+}
+```
+
+---
+
+## 🔧 How to Use
+
+Just include the header:
+```cpp
+#include "Fixed.hpp"
+```
+
+No extra dependencies. No build system required. Use with any modern C++ compiler:
+You can build the project using the provided Makefile.
+#### ✅ Build & Run:
+```bash
+make
+./Fixed
+```
+#### 🧹 Clean Build Files:
+```bash
+make clean     # removes object files
+make fclean    # removes object files + binary
+make re        # full rebuild
+```
+Alternatively, you can compile manually:
+```bash
+c++ -Wall -Wextra -Werror main.cpp -o Fixed
+```
+## 🛠️ TODO
+
+Support variable fractional precision
+
+Maybe using templates?
+
+Handle overflow cases gracefully
+
+Add unit tests (Catch2? GoogleTest?), I do provide the main.cpp for fast testing.
+
+Explain the math behind fixed-point (or send a PR and do it for me 😄)
+
+## 📜 License
+
+MIT — do whatever you want, just don’t blame me if it breaks.
+## ❤️ Contribute
+
+Floating point may be the root of all evil, but this repo is open to improvement. Found a bug? Want to optimize the math? add more tests? Submit a PR or open an issue.
