@@ -52,6 +52,22 @@ int main( void )
 		std::cout << "===== testing casting from Fixed type ==\n"
 				<< x << '\n'
 				<< y << '\n';
+		std::cout << "==================================" << std::endl;
 	}
+	{
+		std::cout << "===== testing deviding by zero exception ==\n";
+		Fixed a(1);
+		Fixed b(0);
+		try
+		{
+			Fixed c = a / b ;
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << std::endl;
+		}
+		
+	}
+
 	return 0;
 }

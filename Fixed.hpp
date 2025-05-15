@@ -149,6 +149,8 @@ inline Fixed Fixed::operator*(const Fixed &other) const
 }
 inline Fixed Fixed::operator/(const Fixed &other) const
 {
+	if (other.raw_bits == 0)
+		throw (std::runtime_error("Fixed: error attemting to divide by zero"));
 	Fixed new_fixed;
 	new_fixed.setRawBits(((long )this->getRawBits() * (1 << fractional_bit)) / other.getRawBits());
 	return (new_fixed);
