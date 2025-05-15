@@ -37,6 +37,21 @@ int main( void )
 				<< Fixed::min(a, b) << '\n';
 		std::cout << "==================================" << std::endl;
 	}
+	{/* testing if casting works*/
+		Fixed a = static_cast<Fixed>(10);
+		Fixed b = static_cast<Fixed>(1.5f);
 
+		std::cout << "===== testing casting to Fixed type ==\n"
+				<< a << '\n'
+				<< b << '\n';
+		
+		int x = static_cast<int>(a);
+		float y = static_cast<float>(b);
+
+
+		std::cout << "===== testing casting from Fixed type ==\n"
+				<< x << '\n'
+				<< y << '\n';
+	}
 	return 0;
 }

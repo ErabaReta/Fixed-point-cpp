@@ -40,6 +40,10 @@ class Fixed
 		Fixed &operator--();
 		Fixed operator++(int );
 		Fixed operator--(int );
+		//==== casting operators ====================
+
+		operator int() const;
+		operator float() const;
 		//===========================================
 
 		static	Fixed& min(Fixed &f1, Fixed &f2);
@@ -176,6 +180,16 @@ inline Fixed Fixed::operator--(int )
 	// this->setRawBits(this->getRawBits() + 1); // increase the fixed-point value from the smallest representable ϵ such as 1 + ϵ > 1.
 	this->setRawBits(this->getRawBits() - (1 << fractional_bit));
 	return (tmp);
+}
+//==== casting operators ====================
+
+inline Fixed::operator int() const
+{
+	return (toInt());
+}
+inline Fixed::operator float() const
+{
+	return (toFloat());
 }
 //==========================================
 inline Fixed& Fixed::min(Fixed &f1, Fixed &f2)
