@@ -6,12 +6,12 @@
 # include <ostream>
 # include <cmath>
 
-
+template <int fractional_bit>
 class Fixed
 {
 	private:
 		int raw_bits;// storing the bits creating the value of the fixed point (without putting the point)
-		static const int fractional_bit = 8;// number of bits that represent the fraction part of the number
+		// static const int fractional_bit = 8;// number of bits that represent the fraction part of the number
 
 	public:
 		Fixed() : raw_bits(0){};
@@ -58,8 +58,8 @@ class Fixed
 		int toInt( void ) const;
 };
 //////////////////////////////////////////////////////////////////////////////
-
-inline Fixed &Fixed::operator=(const Fixed &other)
+template <int fractional_bit>
+inline Fixed<fractional_bit> &Fixed<fractional_bit>::operator=(const Fixed<fractional_bit> &other)
 {
 	if (this != &other)
 	{
@@ -68,33 +68,40 @@ inline Fixed &Fixed::operator=(const Fixed &other)
 	return (*this);
 }
 
-inline int Fixed::getRawBits( void ) const
+template <int fractional_bit>
+inline int Fixed<fractional_bit>::getRawBits( void ) const
 {
 	return (raw_bits);
 }
 
-inline void Fixed::setRawBits( int const raw )
+template <int fractional_bit>
+inline void Fixed<fractional_bit>::setRawBits( int const raw )
 {
 	raw_bits = raw;
 }
 
-inline Fixed::Fixed(const int integer) : raw_bits(integer * (1 << fractional_bit))
+template <int fractional_bit>
+inline Fixed<fractional_bit>::Fixed(const int integer) : raw_bits(integer * (1 << fractional_bit))
 {}
 
-inline Fixed::Fixed(const float floating_point) : raw_bits((int )roundf(floating_point * (1 << fractional_bit)))
+template <int fractional_bit>
+inline Fixed<fractional_bit>::Fixed(const float floating_point) : raw_bits((int )roundf(floating_point * (1 << fractional_bit)))
 {}
 
-inline float Fixed::toFloat( void ) const
+template <int fractional_bit>
+inline float Fixed<fractional_bit>::toFloat( void ) const
 {
 	return (((float)raw_bits / (1 << fractional_bit)));
 }
 
-inline int Fixed::toInt( void ) const
+template <int fractional_bit>
+inline int Fixed<fractional_bit>::toInt( void ) const
 {
 	return(raw_bits / (1 << fractional_bit));
 }
 
-inline std::ostream& operator<<(std::ostream& os, const Fixed &fixed)
+template <int fractional_bit>
+inline std::ostream& operator<<(std::ostream& os, const Fixed<fractional_bit> &fixed)
 {
 	os << fixed.toFloat();
 	return (os);
@@ -102,113 +109,150 @@ inline std::ostream& operator<<(std::ostream& os, const Fixed &fixed)
 
 //=======   comparison operators =========================================
 
-inline bool Fixed::operator>(const Fixed &other) const
+template <int fractional_bit>
+inline bool Fixed<fractional_bit>::operator>(const Fixed<fractional_bit> &other) const
 {
 	return (this->getRawBits() > other.getRawBits());
 }
-inline bool Fixed::operator<(const Fixed &other) const
+
+template <int fractional_bit>
+inline bool Fixed<fractional_bit>::operator<(const Fixed<fractional_bit> &other) const
 {
 	return (this->getRawBits() < other.getRawBits());
 }
-inline bool Fixed::operator>=(const Fixed &other) const
+
+template <int fractional_bit>
+inline bool Fixed<fractional_bit>::operator>=(const Fixed<fractional_bit> &other) const
 {
 	return (this->getRawBits() >= other.getRawBits());
 }
-inline bool Fixed::operator<=(const Fixed &other) const
+
+template <int fractional_bit>
+inline bool Fixed<fractional_bit>::operator<=(const Fixed<fractional_bit> &other) const
 {
 	return (this->getRawBits() <= other.getRawBits());
 }
-inline bool Fixed::operator==(const Fixed &other) const
+
+template <int fractional_bit>
+inline bool Fixed<fractional_bit>::operator==(const Fixed<fractional_bit> &other) const
 {
 	return (this->getRawBits() == other.getRawBits());
 }
-inline bool Fixed::operator!=(const Fixed &other) const
+
+template <int fractional_bit>
+inline bool Fixed<fractional_bit>::operator!=(const Fixed<fractional_bit> &other) const
 {
 	return (!(*this == other));
 }
-
 //=======   arithmetic operators ===========================================
 
-inline Fixed Fixed::operator+(const Fixed &other) const
+template <int fractional_bit>
+inline Fixed<fractional_bit> Fixed<fractional_bit>::operator+(const Fixed<fractional_bit> &other) const
 {
-	Fixed new_fixed;
-	new_fixed.setRawBits((this->getRawBits() + other.getRawBits()));
-	return (new_fixed);
-}
-inline Fixed Fixed::operator-(const Fixed &other) const
-{
-	Fixed new_fixed;
-	new_fixed.setRawBits((this->getRawBits() - other.getRawBits()));
-	return (new_fixed);
-}
-inline Fixed Fixed::operator*(const Fixed &other) const
-{
-	Fixed new_fixed;
-	new_fixed.setRawBits(((long )this->getRawBits() * other.getRawBits()) / (1 << fractional_bit));
-	return (new_fixed);
-}
-inline Fixed Fixed::operator/(const Fixed &other) const
-{
-	if (other.raw_bits == 0)
-		throw (std::runtime_error("Fixed: error attemting to divide by zero"));
-	Fixed new_fixed;
-	new_fixed.setRawBits(((long )this->getRawBits() * (1 << fractional_bit)) / other.getRawBits());
-	return (new_fixed);
+	Fixed<fractional_bit> new_Fixed;
+	new_Fixed.setRawBits((this->getRawBits() + other.getRawBits()));
+	return (new_Fixed);
 }
 
-//==== increment/decrement operators ========
-inline Fixed &Fixed::operator++()
+template <int fractional_bit>
+inline Fixed<fractional_bit> Fixed<fractional_bit>::operator-(const Fixed<fractional_bit> &other) const
 {
-	// this->setRawBits(this->getRawBits() + 1); // increase the fixed-point value from the smallest representable ϵ such as 1 + ϵ > 1.
+	Fixed<fractional_bit> new_Fixed;
+	new_Fixed.setRawBits((this->getRawBits() - other.getRawBits()));
+	return (new_Fixed);
+}
+
+template <int fractional_bit>
+inline Fixed<fractional_bit> Fixed<fractional_bit>::operator*(const Fixed<fractional_bit> &other) const
+{
+	Fixed<fractional_bit> new_Fixed;
+	new_Fixed.setRawBits(((long )this->getRawBits() * other.getRawBits()) / (1 << fractional_bit));
+	return (new_Fixed);
+}
+
+template <int fractional_bit>
+inline Fixed<fractional_bit> Fixed<fractional_bit>::operator/(const Fixed<fractional_bit> &other) const
+{
+	if (other.raw_bits == 0)
+		throw (std::runtime_error("Fixed<fractional_bit>: error attemting to divide by zero"));
+	Fixed<fractional_bit> new_Fixed;
+	new_Fixed.setRawBits(((long )this->getRawBits() * (1 << fractional_bit)) / other.getRawBits());
+	return (new_Fixed);
+}
+//==== increment/decrement operators ========
+
+template <int fractional_bit>
+inline Fixed<fractional_bit> &Fixed<fractional_bit>::operator++()
+{
+	// this->setRawBits(this->getRawBits() + 1); // increase the Fixed<fractional_bit>-point value from the smallest representable ϵ such as 1 + ϵ > 1.
 	this->setRawBits(this->getRawBits() + (1 << fractional_bit));
 	return (*this);
 }
-inline Fixed &Fixed::operator--()
+
+template <int fractional_bit>
+inline Fixed<fractional_bit> &Fixed<fractional_bit>::operator--()
 {
-	// this->setRawBits(this->getRawBits() + 1); // increase the fixed-point value from the smallest representable ϵ such as 1 + ϵ > 1.
+	// this->setRawBits(this->getRawBits() + 1); // increase the Fixed<fractional_bit>-point value from the smallest representable ϵ such as 1 + ϵ > 1.
 	this->setRawBits(this->getRawBits() - (1 << fractional_bit));
 	return (*this);
 }
-inline Fixed Fixed::operator++(int )
+
+template <int fractional_bit>
+inline Fixed<fractional_bit> Fixed<fractional_bit>::operator++(int )
 {
-	Fixed tmp(*this);
-	// this->setRawBits(this->getRawBits() + 1); // increase the fixed-point value from the smallest representable ϵ such as 1 + ϵ > 1.
+	Fixed<fractional_bit> tmp(*this);
+	// this->setRawBits(this->getRawBits() + 1); // increase the Fixed<fractional_bit>-point value from the smallest representable ϵ such as 1 + ϵ > 1.
 	this->setRawBits(this->getRawBits() + (1 << fractional_bit));
 	return (tmp);
 }
-inline Fixed Fixed::operator--(int )
+
+template <int fractional_bit>
+inline Fixed<fractional_bit> Fixed<fractional_bit>::operator--(int )
 {
-	Fixed tmp(*this);
-	// this->setRawBits(this->getRawBits() + 1); // increase the fixed-point value from the smallest representable ϵ such as 1 + ϵ > 1.
+	Fixed<fractional_bit> tmp(*this);
+	// this->setRawBits(this->getRawBits() + 1); // increase the Fixed<fractional_bit>-point value from the smallest representable ϵ such as 1 + ϵ > 1.
 	this->setRawBits(this->getRawBits() - (1 << fractional_bit));
 	return (tmp);
 }
 //==== casting operators ====================
 
-inline Fixed::operator int() const
+template <int fractional_bit>
+inline Fixed<fractional_bit>::operator int() const
 {
 	return (toInt());
 }
-inline Fixed::operator float() const
+
+template <int fractional_bit>
+inline Fixed<fractional_bit>::operator float() const
 {
 	return (toFloat());
 }
 //==========================================
-inline Fixed& Fixed::min(Fixed &f1, Fixed &f2)
+
+template <int fractional_bit>
+inline Fixed<fractional_bit>& Fixed<fractional_bit>::min(Fixed<fractional_bit> &f1, Fixed<fractional_bit> &f2)
 {
 	return ((f1 > f2) ? f2 : f1);
 }
-inline const Fixed& Fixed::min(const Fixed &f1, const Fixed &f2)
+
+template <int fractional_bit>
+inline const Fixed<fractional_bit>& Fixed<fractional_bit>::min(const Fixed<fractional_bit> &f1, const Fixed<fractional_bit> &f2)
 {
 	return ((f1 > f2) ? f2 : f1);
 }
-inline Fixed& Fixed::max(Fixed &f1, Fixed &f2)
+
+template <int fractional_bit>
+inline Fixed<fractional_bit>& Fixed<fractional_bit>::max(Fixed<fractional_bit> &f1, Fixed<fractional_bit> &f2)
 {
 	return ((f1 < f2) ? f2 : f1);
 }
-inline const Fixed& Fixed::max(const Fixed &f1, const Fixed &f2)
+
+template <int fractional_bit>
+inline const Fixed<fractional_bit>& Fixed<fractional_bit>::max(const Fixed<fractional_bit> &f1, const Fixed<fractional_bit> &f2)
 {
 	return ((f1 < f2) ? f2 : f1);
 }
+
+typedef Fixed<8> Fixed8_t;
 
 #endif

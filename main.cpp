@@ -4,9 +4,9 @@
 int main( void )
 {
 	
-	{/* well, I made this for fast testing, I ll more later (may be)*/
-		Fixed a(10);
-		Fixed b(1.5f);
+	{/* well, I made this for fast testing, I ll do more later (may be)*/
+		Fixed8_t a(10);
+		Fixed8_t b(1.5f);
 
 		std::cout << "===== testing arithmetics =======\n"
 				<< a + b << '\n'
@@ -33,13 +33,13 @@ int main( void )
 				<< (a == b) << '\n'
 				<< (a != b) << '\n';
 		std::cout << "===== testing max/min ===========\n"
-				<< Fixed::max(a, b) << '\n'
-				<< Fixed::min(a, b) << '\n';
+				<< Fixed8_t::max(a, b) << '\n'
+				<< Fixed8_t::min(a, b) << '\n';
 		std::cout << "==================================" << std::endl;
 	}
 	{/* testing if casting works*/
-		Fixed a = static_cast<Fixed>(10);
-		Fixed b = static_cast<Fixed>(1.5f);
+		Fixed8_t a = static_cast<Fixed8_t>(10);
+		Fixed8_t b = static_cast<Fixed8_t>(1.5f);
 
 		std::cout << "===== testing casting to Fixed type ==\n"
 				<< a << '\n'
@@ -56,11 +56,11 @@ int main( void )
 	}
 	{
 		std::cout << "===== testing deviding by zero exception ==\n";
-		Fixed a(1);
-		Fixed b(0);
+		Fixed8_t a(1);
+		Fixed8_t b(0);
 		try
 		{
-			Fixed c = a / b ;
+			Fixed8_t c = a / b ;
 		}
 		catch(const std::exception& e)
 		{
