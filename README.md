@@ -89,9 +89,12 @@ c++ -Wall -Wextra -Werror main.cpp -o Fixed
 ```
 ## 🛠️ TODO
 
-chosing between using int under the hood or long, (probably using template for that). 
+Chosing between using int (2^32 bits) under the hood or long (2^64 bits) or even a more flexible hybrid structure (variable bits), probably using template for that. 
+
+Most IDEs highlights code in the .tpp files since it doesn't see the full difinition (no real compiling errors), I'll probably do a workaround (or not.. ).
 
 Handle overflow cases gracefully.
+
 
 Add unit tests (GoogleTest?...), I did provide the main.cpp for fast testing tho.
 
