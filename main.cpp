@@ -8,6 +8,7 @@ int main( void )
 		Fixed8_t a(10);
 		Fixed8_t b(1.5f);
 
+		std::cout << "precision = " << a.getPrecision() << '\n';
 		std::cout << "===== testing arithmetics =======\n"
 				<< a + b << '\n'
 				<< a - b << '\n'

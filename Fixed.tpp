@@ -200,5 +200,10 @@ inline const Fixed<fractional_bit>& Fixed<fractional_bit>::max(const Fixed<fract
 {
 	return ((f1 < f2) ? f2 : f1);
 }
+template <int fractional_bit>
+int Fixed<fractional_bit>::getPrecision() const
+{
+	return (fractional_bit);
+}
 
 #endif
