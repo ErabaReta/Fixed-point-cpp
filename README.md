@@ -20,7 +20,7 @@ So here’s an attempt at creating a **simple fixed-point type**, where we prior
 
 ## ⚙️ What It Is
 
-This project provides a `Fixed` class using **8 fractional bits** (Q24.8 format) to:
+This project provides a `Fixed` class using **variable fractional bits** (Q24.8 format included) to:
 - Represent floats as integers under the hood
 - Replace float/double types where feasible
 - Gain some speed (especially on targets without FPUs)
@@ -38,6 +38,7 @@ This project provides a `Fixed` class using **8 fractional bits** (Q24.8 format)
 - `min()` and `max()` helpers
 - `std::ostream` support (`<<`)
 - Inline, header-only implementation
+- Implementing the variable fractional precision using templates.
 
 ---
 
@@ -48,8 +49,8 @@ This project provides a `Fixed` class using **8 fractional bits** (Q24.8 format)
 #include <iostream>
 
 int main() {
-    Fixed a(10);          // from int
-    Fixed b(3.5f);        // from float
+    Fixed8_t a(10);          // from int
+    Fixed8_t b(3.5f);        // from float
 
     std::cout << "a: " << a << ", b: " << b << "\n";
     std::cout << "a + b = " << (a + b) << "\n";
@@ -88,19 +89,17 @@ c++ -Wall -Wextra -Werror main.cpp -o Fixed
 ```
 ## 🛠️ TODO
 
-Support variable fractional precision
+chosing between using int under the hood or long, (probably using template for that). 
 
-Maybe using templates?
+Handle overflow cases gracefully.
 
-Handle overflow cases gracefully
+Add unit tests (GoogleTest?...), I did provide the main.cpp for fast testing tho.
 
-Add unit tests (Catch2? GoogleTest?), I do provide the main.cpp for fast testing.
-
-Explain the math behind fixed-point (or send a PR and do it for me 😄)
+Explain the math behind fixed-point and and why Fixed shines(or send a PR and do it for me 😄)
 
 ## 📜 License
 
 MIT — do whatever you want, just don’t blame me if it breaks.
 ## ❤️ Contribute
 
-Floating point may be the root of all evil, but this repo is open to improvement. Found a bug? Want to optimize the math? add more tests? Submit a PR or open an issue.
+Floating point may not be the root of all evil, but this repo is open to improvement. Found a bug? Want to optimize the math? add more tests? Submit a PR or open an issue.
